@@ -23,6 +23,9 @@ class App extends Component {
         this.setState({ data })
       })
     })
+    .catch(err => {
+      console.error(err)
+    })
   }
 
   render() {
@@ -43,39 +46,32 @@ class App extends Component {
     const { restaurants } = this.state.data
     if (!restaurants.length) return null
     return restaurants.map((restaurant, index) => {
-      const { name, price, image_url, phone } = restaurant
+      const { name, price, image_url, address } = restaurant
       return (
         <div className='restaurants' key={index}>
-          <p>{ restaurant.name }</p>
+          <h3>{ name }</h3>
           <img src={image_url} alt={`image for ${name}`} />
           { this.intToDollarSign(price) }
-          { this.formatTelephoneNumber(phone) }
+          <p>{ address }</p>
         </div>
       )
     })
   }
 
-  intToDollarSign (str) {
-    if (!str) return null
-    const int = parseInt(str)
+  intToDollarSign (int) {
+    if (!int) return null
+
     let i = 0
     let dollarSigns = ''
 
-    while(i <= int) {
+    while(i < int) {
       dollarSigns += '$'
       i++
     }
-    return <p>{dollarSigns}</p>
+    return <p className='price'>{dollarSigns}</p>
   }
 
-  formatTelephoneNumber (phone) {
-    if (!phone) return null
-    let phoneArr = Array.from(phone)
-    phoneArr.splice(10, 3, '') // Removes excess digits
-    phoneArr.splice(3, 0, '-')
-    phoneArr.splice(7, 0, '-')
-    return <p>{ phoneArr }</p>
-  }
 }
+
 
 export default App;
